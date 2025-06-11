@@ -1,8 +1,10 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-let life = 3;
-// ボールの数
-const ballCount = 30;
+let life = 10;
+let lifeDisplay = document.getElementById("lifeDisplay");
+
+let balls = [];
+let ballCount = 50;
 
 // ボールのクラス
 class Ball {
@@ -11,12 +13,11 @@ class Ball {
     this.y = y;
     this.dx = dx;
     this.dy = dy;
-    this.size = size; // 半径
+    this.size = size;
     this.color = color;
   }
 
   update() {
-    // 壁で跳ね返る
     if (this.x + this.dx > canvas.width - this.size || this.x + this.dx < this.size) {
       this.dx = -this.dx;
     }
@@ -33,38 +34,39 @@ class Ball {
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fillStyle = this.color;
     ctx.fill();
-
     if (isPlayer) {
       ctx.lineWidth = 2;
-      ctx.strokeStyle = "#000000"; // 黒の枠線
+      ctx.strokeStyle = "#000000";
       ctx.stroke();
-
       ctx.font = "12px Arial";
       ctx.fillStyle = "#000000";
       ctx.textAlign = "center";
       ctx.fillText("YOU", this.x, this.y - this.size - 8);
     }
-
     ctx.closePath();
   }
 }
 
-// 自動ボール生成（すべて青色で固定）
-const balls = [];
-for (let i = 0; i < ballCount; i++) {
+function createBall() {
   const size = 15;
   const x = Math.random() * (canvas.width - size * 2) + size;
   const y = Math.random() * (canvas.height - size * 2) + size;
   const dx = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1);
   const dy = (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1);
-  const color = "#0095DD"; // 青固定
-  balls.push(new Ball(x, y, dx, dy, size, color));
+  const color = "#0095DD";
+  return new Ball(x, y, dx, dy, size, color);
 }
 
-// プレイヤーボール（赤色で固定）
-const playerBall = new Ball(canvas.width/2, canvas.height/2, 0, 0, 20, "#FF0000");
+function initializeBalls() {
+  balls = [];
+  for (let i = 0; i < ballCount; i++) {
+    balls.push(createBall());
+  }
+}
 
-// キー入力管理
+// プレイヤー
+const playerBall = new Ball(canvas.width / 2, canvas.height / 2, 0, 0, 20, "#FF0000");
+
 const keys = {
   ArrowUp: false,
   ArrowDown: false,
@@ -75,7 +77,6 @@ const keys = {
 document.addEventListener("keydown", e => {
   if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
 });
-
 document.addEventListener("keyup", e => {
   if (keys.hasOwnProperty(e.key)) keys[e.key] = false;
 });
@@ -90,7 +91,6 @@ function updatePlayerBall() {
   if (keys.ArrowRight && playerBall.x + r < canvas.width) playerBall.x += speed;
 }
 
-// 簡単な衝突判定（丸と丸）
 function checkCollision(b1, b2) {
   const dx = b1.x - b2.x;
   const dy = b1.y - b2.y;
@@ -98,9 +98,7 @@ function checkCollision(b1, b2) {
   return distance < b1.size + b2.size;
 }
 
-// 衝突時の反発処理（簡易版）
 function resolveCollision(b1, b2) {
-  // 速度を入れ替えるだけ
   const tempDx = b1.dx;
   const tempDy = b1.dy;
   b1.dx = b2.dx;
@@ -112,30 +110,56 @@ function resolveCollision(b1, b2) {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 衝突チェック (自動ボール同士)
   for (let i = 0; i < balls.length; i++) {
     for (let j = i + 1; j < balls.length; j++) {
       if (checkCollision(balls[i], balls[j])) {
         resolveCollision(balls[i], balls[j]);
       }
     }
-    // 衝突チェック（プレイヤーボールと自動ボール）
+
     if (checkCollision(balls[i], playerBall)) {
-        
+      // 衝突したらライフを減らす
+      balls.splice(i, 1); // 当たったボールを消す
+      i--;
+      life--;
+      updateLifeDisplay();
+
+      if (life <= 0) {
+        alert("ゲームオーバー！");
+        life = 10;
+        updateLifeDisplay();
+        initializeBalls();
+        return;
+      }
     }
   }
 
-  // 自動ボール更新・描画
   for (const ball of balls) {
     ball.update();
     ball.draw();
   }
 
-  // プレイヤーボール更新・描画
   updatePlayerBall();
   playerBall.draw(true);
 
   requestAnimationFrame(draw);
 }
 
+function updateLifeDisplay() {
+  lifeDisplay.textContent = `ライフ: ${life}`;
+}
+
+// ボール追加
+function addBall() {
+  balls.push(createBall());
+}
+
+// ボール削除
+function removeBall() {
+  if (balls.length > 0) {
+    balls.pop();
+  }
+}
+
+initializeBalls();
 draw();
