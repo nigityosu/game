@@ -8,3 +8,17 @@ canvas {
     display: block;
     margin: 0 auto;
 }
+.wa{
+    justify-content: center;
+    width: 80%;
+}
+.ask{
+    display: flex;
+    justify-content: space-around;
+}
+#pls{
+    padding: 1%;
+}
+#mis{
+    padding: 1%;
+}

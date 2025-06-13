@@ -2,9 +2,18 @@ const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 let life = 10;
 let lifeDisplay = document.getElementById("lifeDisplay");
+let isInvincible = false;
 
 let balls = [];
-let ballCount = 50;
+let ballCount = 10;
+document.getElementById("pls").addEventListener("click", () => {
+  balls.push(createBall());
+});
+document.getElementById("mis").addEventListener("click", () => {
+  if (balls.length > 0) {
+    balls.pop(); // 最後のボールを取り除く
+  }
+});
 
 // ボールのクラス
 class Ball {
@@ -123,13 +132,20 @@ function draw() {
       i--;
       life--;
       updateLifeDisplay();
-
+      
       if (life <= 0) {
         alert("ゲームオーバー！");
         life = 10;
         updateLifeDisplay();
         initializeBalls();
+        activateInvincibility();
         return;
+      }
+      function activateInvincibility(duration = 1000) {
+        isInvincible = true;
+        setTimeout(() => {
+          isInvincible = false;
+        }, duration);
       }
     }
   }
