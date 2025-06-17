@@ -1,24 +1,50 @@
-*{
+* {
     padding: 0;
     margin: 0;
 }
-
+#lifeDisplay{
+    width: 10%;
+    height: 10%;
+    text-align: left;
+}
 canvas {
-    background: rgba(0, 0, 255, 0.276);
+    border: 1px solid #000;
     display: block;
-    margin: 0 auto;
-}
-.wa{
+    margin-bottom: 10px;
+    background-color: #00bfff;
     justify-content: center;
-    width: 80%;
 }
-.ask{
+body{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
-#pls{
-    padding: 1%;
+button{
+    border: 1px solid black;
+    padding: 5%;
+    
 }
-#mis{
-    padding: 1%;
+#gameover{
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.aho{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 119, 0);
+    padding: 2%;
+    border: 3px;
+}
+footer{
+
 }

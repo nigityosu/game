@@ -1,20 +1,30 @@
 <!doctype html>
 <html lang="jp">
-  <head>
-    <meta charset="utf-8" />
-    <title>Gamedev Canvas Workshop</title>
-  </head>
-  <link rel="stylesheet" href="style.css">
-  <body>
-    <canvas id="myCanvas" width="1000" height="690"></canvas>
-    <div class="wa">
 
-      <div class="ask">
-        <button id="pls">+</button>
-        <button id="mis">-</button>
-      </div>
+<head>
+  <meta charset="utf-8" />
+  <title>ボールを使ったゲームだよ</title>
+</head>
+<link rel="stylesheet" href="style.css">
+
+<body>
+  <div id="lifeDisplay">ライフ: ♥</div>
+  <div>
+    <canvas id="myCanvas" width="1000" height="690"></canvas>
+    <button id="pls">+</button>
+    <button id="mis">-</button>
+  </div>
+
+</body>
+<footer>
+  <div id="gameover" style="display:none ;">
+    <div class="aho">
+      <h1>GAMEOVER</h1>
+      <button>もう一回遊べるよ</button>
     </div>
-  </body>
-  <!-- <indx class="indx.js"></indx> -->
-  <script src="script.js"></script>
+  </div>
+</footer>
+<!-- <indx class="indx.js"></indx> -->
+<script src="script.js"></script>
+
 </html>

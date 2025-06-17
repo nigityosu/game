@@ -5,17 +5,14 @@ let lifeDisplay = document.getElementById("lifeDisplay");
 let isInvincible = false;
 
 let balls = [];
-let ballCount = 10;
-document.getElementById("pls").addEventListener("click", () => {
-  balls.push(createBall());
-});
-document.getElementById("mis").addEventListener("click", () => {
-  if (balls.length > 0) {
-    balls.pop(); // 最後のボールを取り除く
-  }
-});
+let ballCount = 20;
+function reset(){
+  ballCount=20;
+  
+}
 
-// ボールのクラス
+document.getElementById("pls").addEventListener("click", addBall);
+document.getElementById("mis").addEventListener("click", removeBall);
 class Ball {
   constructor(x, y, dx, dy, size, color) {
     this.x = x;
@@ -86,6 +83,7 @@ const keys = {
 document.addEventListener("keydown", e => {
   if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
 });
+
 document.addEventListener("keyup", e => {
   if (keys.hasOwnProperty(e.key)) keys[e.key] = false;
 });
@@ -93,7 +91,7 @@ document.addEventListener("keyup", e => {
 function updatePlayerBall() {
   const speed = 4;
   const r = playerBall.size;
-
+  
   if (keys.ArrowUp && playerBall.y - r > 0) playerBall.y -= speed;
   if (keys.ArrowDown && playerBall.y + r < canvas.height) playerBall.y += speed;
   if (keys.ArrowLeft && playerBall.x - r > 0) playerBall.x -= speed;
@@ -116,9 +114,41 @@ function resolveCollision(b1, b2) {
   b2.dy = tempDy;
 }
 
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function activateInvincibility(duration = 1000) {
+  isInvincible = true;
+  setTimeout(() => {
+    isInvincible = false;
+  }, duration);
+}
 
+function updateLifeDisplay() {
+  lifeDisplay.textContent = `ライフ: ${life}`;
+}
+
+function addBall() {
+  balls.push(createBall());
+}
+
+function removeBall() {
+  if (balls.length > 0) {
+    balls.pop();
+  }
+}
+
+let lastTime = 0;
+const fps = 60;
+const interval = 1000 / fps;
+
+function draw(time) {
+  if (time - lastTime < interval) {
+    requestAnimationFrame(draw);
+    return;
+  }
+  lastTime = time;
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // 衝突処理
   for (let i = 0; i < balls.length; i++) {
     for (let j = i + 1; j < balls.length; j++) {
       if (checkCollision(balls[i], balls[j])) {
@@ -126,26 +156,20 @@ function draw() {
       }
     }
 
-    if (checkCollision(balls[i], playerBall)) {
-      // 衝突したらライフを減らす
-      balls.splice(i, 1); // 当たったボールを消す
+    if (checkCollision(balls[i], playerBall) && !isInvincible) {
+      balls.splice(i, 1);
       i--;
       life--;
       updateLifeDisplay();
-      
+      activateInvincibility();
+
       if (life <= 0) {
-        alert("ゲームオーバー！");
+        document.getElementById("gameover").style.display ="flex"
+        ("ゲームオーバー！");
         life = 10;
         updateLifeDisplay();
         initializeBalls();
-        activateInvincibility();
         return;
-      }
-      function activateInvincibility(duration = 1000) {
-        isInvincible = true;
-        setTimeout(() => {
-          isInvincible = false;
-        }, duration);
       }
     }
   }
@@ -161,21 +185,6 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-function updateLifeDisplay() {
-  lifeDisplay.textContent = `ライフ: ${life}`;
-}
-
-// ボール追加
-function addBall() {
-  balls.push(createBall());
-}
-
-// ボール削除
-function removeBall() {
-  if (balls.length > 0) {
-    balls.pop();
-  }
-}
-
 initializeBalls();
-draw();
+updateLifeDisplay();
+requestAnimationFrame(draw);
