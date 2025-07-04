@@ -6,9 +6,24 @@ let isInvincible = false;
 
 let balls = [];
 let ballCount = 20;
-function reset(){
-  ballCount=20;
-  
+
+function reloadPage() {
+  location.reload();
+}
+function start() {
+  document.getElementById("start").addEventListener("click", start);
+  document.getElementById("start").style.display="none";
+  life = 10;
+  updateLifeDisplay();
+  initializeBalls();
+  playerBall.x = canvas.width / 2;
+  playerBall.y = canvas.height / 2;
+  addBall()
+  draw(isPlayer = false)
+}
+function gameovera() {
+  const screen = document.getElementById('gameover');
+  screen.style.display = 'flex';
 }
 
 document.getElementById("pls").addEventListener("click", addBall);
@@ -91,7 +106,6 @@ document.addEventListener("keyup", e => {
 function updatePlayerBall() {
   const speed = 4;
   const r = playerBall.size;
-  
   if (keys.ArrowUp && playerBall.y - r > 0) playerBall.y -= speed;
   if (keys.ArrowDown && playerBall.y + r < canvas.height) playerBall.y += speed;
   if (keys.ArrowLeft && playerBall.x - r > 0) playerBall.x -= speed;
@@ -145,9 +159,7 @@ function draw(time) {
     return;
   }
   lastTime = time;
-  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
   // 衝突処理
   for (let i = 0; i < balls.length; i++) {
     for (let j = i + 1; j < balls.length; j++) {
@@ -164,11 +176,10 @@ function draw(time) {
       activateInvincibility();
 
       if (life <= 0) {
-        document.getElementById("gameover").style.display ="flex"
-        ("ゲームオーバー！");
-        life = 10;
         updateLifeDisplay();
         initializeBalls();
+        gameovera();
+        //document.getElementById("gameover").style.display = "blok"
         return;
       }
     }
@@ -178,7 +189,7 @@ function draw(time) {
     ball.update();
     ball.draw();
   }
-
+  document.getElementById("reset").addEventListener("click", reloadPage);
   updatePlayerBall();
   playerBall.draw(true);
 

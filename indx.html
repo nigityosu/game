@@ -8,23 +8,24 @@
 <link rel="stylesheet" href="style.css">
 
 <body>
-  <div id="lifeDisplay">ライフ: ♥</div>
+  <div id="lifeDisplay">ライフ: 10</div>
   <div>
     <canvas id="myCanvas" width="1000" height="690"></canvas>
-    <button id="pls">+</button>
-    <button id="mis">-</button>
   </div>
 
+  <div id="start" style="display: flex;">
+    <button id="startbutton" onclick="start()">スタートするよ</button>
+    <button id="mis">-</button>
+    <button id="pls">+</button>
+  </div>
 </body>
 <footer>
-  <div id="gameover" style="display:none ;">
-    <div class="aho">
-      <h1>GAMEOVER</h1>
-      <button>もう一回遊べるよ</button>
+  <div id="gameover" style="display: none;">
+    <div id="gamenn">
+      <h1 class="">GAMEOVER</h1>
+      <button id="reset" onclick="resets()">CONTINUE</button>
     </div>
   </div>
 </footer>
-<!-- <indx class="indx.js"></indx> -->
 <script src="script.js"></script>
-
 </html>
