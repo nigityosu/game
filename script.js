@@ -303,3 +303,4 @@ function draw(time) {
 initializeBalls();
 updateLifeDisplay();
 requestAnimationFrame(draw);
+// ゲーム開始時にプレイヤーの位置を中央に設定
