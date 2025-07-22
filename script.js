@@ -22,118 +22,73 @@ document.getElementById("ge").addEventListener("click", syokyuu);
 document.getElementById("tyu").addEventListener("click", chukyu);
 document.getElementById("jyo").addEventListener("click", jyoukyuu);
 document.getElementById("soku").addEventListener("click", soku);
-document.getElementById("hge").addEventListener("click", hsyokyuu);
-document.getElementById("htyu").addEventListener("click", hchukyu);
-document.getElementById("hjyo").addEventListener("click", hjyoukyuu);
-document.getElementById("hsoku").addEventListener("click", hsoku);
 document.body.style.overflow = 'hidden';
 document.addEventListener('contextmenu', function (e) {
   e.preventDefault();
 });
+function syoki() {
+  document.getElementById("rever").style.display="none";
+  document.getElementById("gameover").style.display="none";
+  updateLifeDisplay();
+  playerBall.x = canvas.width / 2;
+  playerBall.y = canvas.height / 2;
+  draw(isPlayer = false);
+}
 
 function gameovera() {
   const screen = document.getElementById('gameover');
   screen.style.display = 'flex';
 }// ゲームオーバー
 function hardcore() {
-  document.getElementById("mode").style.display="flex";
   document.getElementById("rever").style.display="none";
   document.getElementById("gameover").style.display="none";
+  document.getElementById("start").style.display="none";
+  life = 1;
+  speed = 10;
+  ballCount = 50;
+  balls = [];
+  initializeBalls();
+  activateInvincibility(1000);
 }
   
 function syokyuu(){
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
+  syoki();
+  ballCount = 15;
   balls = [];
-  ballCount=10;
   initializeBalls();
   life = 10;
-  updateLifeDisplay();
-  playerBall.x = canvas.width / 2;
-  playerBall.y = canvas.height / 2;
-  draw(isPlayer = false);
-  activateInvincibility(duration = 1000);
-  speed = 5; // プレイヤーの移動速度を初期化
+  speed = 5; 
+  activateInvincibility(1000);
+
 }
 function chukyu(){
-  ballCount = 20;
+  syoki();
+  ballCount = 30;
   balls = [];
   initializeBalls();
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
-  life = 10;
-  updateLifeDisplay();
-  playerBall.x = canvas.width / 2;
-  playerBall.y = canvas.height / 2;
-  draw(isPlayer = false);
-  activateInvincibility(duration = 1000);
+  life = 10; 
   speed = 7; 
+  activateInvincibility(1000);
 }
 function jyoukyuu(){
-  ballCount = 40;
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
-  life = 10;
-  updateLifeDisplay();
-  playerBall.x = canvas.width / 2;
-  playerBall.y = canvas.height / 2;
-  draw(isPlayer = false);
-  activateInvincibility(duration = 1000);
-  //balls.push(createBall())
+  syoki();
+  ballCount = 60;
+  balls = [];
   initializeBalls();
-  speed = 10;
+  life = 10;
+  speed = 8; 
+  activateInvincibility(1000);
+
 }
 function soku(){
-  ballCount = 500;
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
-  life = 10;
-  updateLifeDisplay();
-  playerBall.x = canvas.width / 2;
-  playerBall.y = canvas.height / 2;
-  draw(isPlayer = false);
-  activateInvincibility(duration = 1000);
+  syoki();
+  ballCount = 60;
+  balls = [];
   initializeBalls();
-  speed = 20; // プレイヤーの移動速度を速く設定
-}
-function hsyokyuu(){
-  syokyuu();
   life = 1;
-  document.getElementById("mode").style.display="none";
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
-  document.getElementById("lifeDisplay").textContent = "ライフ: 1";
-  document.getElementById("start").style.display="none";
+  speed = 10;
+  activateInvincibility(1000);
 }
-function hchukyu(){
-  chukyu();
-  life = 1;
-  document.getElementById("mode").style.display="none";
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
-  document.getElementById("lifeDisplay").textContent = "ライフ: 1";
-  document.getElementById("start").style.display="none";
-}
-function hjyoukyuu(){
-  jyoukyuu();
-  life = 1;
-  document.getElementById("mode").style.display="none";
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
-  document.getElementById("lifeDisplay").textContent = "ライフ: 1";
-  document.getElementById("start").style.display="none";
-}
-function hsoku(){
-  soku();
-  life = 1;
-  document.getElementById("mode").style.display="none";
-  document.getElementById("rever").style.display="none";
-  document.getElementById("gameover").style.display="none";
-  document.getElementById("lifeDisplay").textContent = "ライフ: 1";
-  document.getElementById("start").style.display="none";
-}
-
-
 class Ball {
   constructor(x, y, dx, dy, size, color) {
     this.x = x;
